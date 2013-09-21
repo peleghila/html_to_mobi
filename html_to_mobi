@@ -30,5 +30,5 @@ os.system('%s %s.epub -o %s.mobi'%(kindlegen,file_name,file_name))
 
 
 #cleanup temp files
-#os.remove('%s.epub'%file_name)
-#os.remove('%s.html'%file_name)
+os.remove('%s.epub'%file_name)
+os.remove('%s.html'%file_name)
