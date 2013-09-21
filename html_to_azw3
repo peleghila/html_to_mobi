@@ -4,9 +4,13 @@ import urllib2
 import os
 import re
 
-kindlegen='c:/utils/kindlegen/kindlegen'
+if len(sys.argv) < 4:
+    print 'usage: %s <url> <name> <title>'%sys.argv[0]
+    exit(1)
+
 url = sys.argv[1]
 file_name = sys.argv[2]
+author = sys.argv[3]
 
 print url
 print file_name
@@ -15,20 +19,13 @@ print file_name
 response = urllib2.urlopen(url)
 html = response.read()
 
-html = re.sub('<(/)?(A|a)([^A-Za-z>][^>]*>|>)', '', html)
 f = open(file_name + '.html','wb')
 f.write(html)
 f.close()
 
 #run calibre's ebook-convert
-if os.system('ebook-convert %s.html %s.epub --max-levels 0 --title %s --no-chapters-in-toc --insert-blank-line'%(file_name,file_name,file_name)) != 0:
+if os.system('ebook-convert %s.html %s.azw3 --max-levels 0 --title %s --no-chapters-in-toc --insert-blank-line --authors %s'%(file_name,file_name,file_name,author)) != 0:
     print 'error running ebook-convert'
     exit(1)
 
-#run kindle-gen on result
-os.system('%s %s.epub -o %s.mobi'%(kindlegen,file_name,file_name))
-
-
-#cleanup temp files
-os.remove('%s.epub'%file_name)
 os.remove('%s.html'%file_name)
